@@ -5,7 +5,13 @@ import logo from "./images/instagram-logo.png";
 import Post from "./Post";
 import { db, auth } from "./firebase";
 import { Modal, Button, makeStyles, Input } from "@material-ui/core";
+import ImageUpload from "./ImageUpload";
 // import { eventWrapper } from "@testing-library/user-event/dist/utils";
+
+/*
+    => solve the require issue of login and signup in username 
+
+*/
 
 function getModalStyle() {
     const top = 50;
@@ -55,15 +61,18 @@ function App() {
     }, [user, username]);
 
     useEffect(() => {
-        db.collection("posts").onSnapshot((snapshot) => {
-            setPosts(
-                snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    post: doc.data(),
-                }))
-            );
-        });
+        db.collection("posts")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot) => {
+                setPosts(
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        post: doc.data(),
+                    }))
+                );
+            });
     }, []);
+
     const [open, setOpen] = React.useState(false);
     const singnUp = (event) => {
         event.preventDefault();
@@ -87,6 +96,12 @@ function App() {
     return (
         <div className="App">
             {user ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Sorry, you need to log in to upload...</h3>
+            )}
+
+            {user ? (
                 <Button onClick={() => auth.signOut()}>Logout</Button>
             ) : (
                 <div className="app-loginContainer">
@@ -96,7 +111,7 @@ function App() {
             )}
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div style={modalStyle} className={classes.paper}>
-                    <form className="app-signup">
+                    <form className="app-signup" onSubmit={singnUp}>
                         <center>
                             <img
                                 className="app-headerImage"
@@ -108,24 +123,25 @@ function App() {
                             type="text"
                             placeholder="username"
                             value={username}
+                            required
                             onChange={(e) => setUsername(e.target.value)}
                         />
                         <Input
                             placeholder="email"
                             type="text"
                             value={email}
+                            required
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <Input
                             placeholder="password"
                             type="password"
                             value={password}
+                            required
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <br />
-                        <Button onClick={singnUp} type="submit">
-                            singnUp
-                        </Button>
+                        <Button type="submit">singnUp</Button>
                     </form>
                 </div>
             </Modal>
@@ -144,12 +160,14 @@ function App() {
                             placeholder="email"
                             type="text"
                             value={email}
+                            required
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <Input
                             placeholder="password"
                             type="password"
                             value={password}
+                            required
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <br />
