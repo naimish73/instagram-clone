@@ -96,12 +96,6 @@ function App() {
     return (
         <div className="App">
             {user ? (
-                <ImageUpload username={user.displayName} />
-            ) : (
-                <h3>Sorry, you need to log in to upload...</h3>
-            )}
-
-            {user ? (
                 <Button onClick={() => auth.signOut()}>Logout</Button>
             ) : (
                 <div className="app-loginContainer">
@@ -194,6 +188,11 @@ function App() {
                     imageUrl={post.imageUrl}
                 />
             ))}
+            {user ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Sorry, you need to log in to upload...</h3>
+            )}
         </div>
     );
 }
