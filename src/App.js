@@ -6,12 +6,7 @@ import Post from "./Post";
 import { db, auth } from "./firebase";
 import { Modal, Button, makeStyles, Input } from "@material-ui/core";
 import ImageUpload from "./ImageUpload";
-// import { eventWrapper } from "@testing-library/user-event/dist/utils";
-
-/*
-    => solve the require issue of login and signup in username 
-
-*/
+// import InstagramEmbed from "react-instagram-embed";
 
 function getModalStyle() {
     const top = 50;
@@ -73,7 +68,7 @@ function App() {
             });
     }, []);
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const singnUp = (event) => {
         event.preventDefault();
         auth.createUserWithEmailAndPassword(email, password)
@@ -93,16 +88,10 @@ function App() {
         setOpenSignIn(false);
     };
 
+    // console.log(posts)
+
     return (
         <div className="App">
-            {user ? (
-                <Button onClick={() => auth.signOut()}>Logout</Button>
-            ) : (
-                <div className="app-loginContainer">
-                    <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-                    <Button onClick={() => setOpen(true)}>Sign Up</Button>
-                </div>
-            )}
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div style={modalStyle} className={classes.paper}>
                     <form className="app-signup" onSubmit={singnUp}>
@@ -178,20 +167,47 @@ function App() {
                     src={logo}
                     alt="logo of instagram"
                 />
+                {user ? (
+                    <Button onClick={() => auth.signOut()}>Logout</Button>
+                ) : (
+                    <div className="app-loginContainer">
+                        <Button onClick={() => setOpenSignIn(true)}>
+                            Sign In
+                        </Button>
+                        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+                    </div>
+                )}
+            </div>
+            <div className="app-posts">
+                {posts.map(({ id, post }) => (
+                    <Post
+                        key={id}
+                        username={post.username}
+                        caption={post.caption}
+                        imageUrl={post.imageUrl}
+                    />
+                ))}
             </div>
 
-            {posts.map(({ id, post }) => (
-                <Post
-                    key={id}
-                    username={post.username}
-                    caption={post.caption}
-                    imageUrl={post.imageUrl}
-                />
-            ))}
+            {/* <InstagramEmbed
+                url="https://www.instagram.com/p/CfLji-5vg4I/"
+                maxWidth={320}
+                hideCaption={false}
+                containerTagName="div"
+                protocol=""
+                injectScript
+                onLoading={() => {}}
+                onSuccess={() => {}}
+                onAfterRender={() => {}}
+                onFailure={() => {}}
+            /> */}
+
             {user ? (
                 <ImageUpload username={user.displayName} />
             ) : (
-                <h3>Sorry, you need to log in to upload...</h3>
+                <center>
+                    <h3>Sorry, you need to log in to upload the image...</h3>
+                </center>
             )}
         </div>
     );
