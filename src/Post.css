@@ -22,3 +22,27 @@
 .post-avatar {
     margin-right: 10px;
 }
+.post-commentBox {
+    display: flex;
+    margin-top: 10px;
+}
+input[type="text"] {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    border-radius: 10px;
+}
+.post-button {
+    height: 40px;
+    width: 100px;
+    transform: translate(0, 10px);
+    color: #6082a3;
+}
+.post-comments {
+    padding-left: 20px;
+}

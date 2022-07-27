@@ -19,6 +19,8 @@
 .app-headerImage {
     object-fit: contain;
 }
-.app-posts {
-    padding: 20px;
+.app-posts > .post {
+    /* justify-content: center; */
+    margin: auto;
+    margin-bottom: 30px;
 }
