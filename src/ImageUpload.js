@@ -5,6 +5,7 @@ import firebase from "firebase";
 import "./ImageUpload.css";
 
 function ImageUpload({ username }) {
+    console.log("step2", username);
     const [image, setImage] = useState(null);
     const [progress, setProgress] = useState(0);
     const [caption, setCaption] = useState("");
@@ -33,6 +34,8 @@ function ImageUpload({ username }) {
                     .child(image.name)
                     .getDownloadURL()
                     .then((url) => {
+                        console.log("step3", username);
+
                         db.collection("posts").add({
                             timestamp:
                                 firebase.firestore.FieldValue.serverTimestamp(),
