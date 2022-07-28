@@ -72,11 +72,12 @@ function App() {
     const singnUp = (event) => {
         event.preventDefault();
         auth.createUserWithEmailAndPassword(email, password)
-            .then((authUser) => {
-                return authUser.user.updateProfile({
+            .then(async (authUser) => {
+                await authUser.user.updateProfile({
                     displayName: username,
                 });
             })
+
             .catch((error) => alert(error.message));
         setOpen(false);
     };
@@ -87,8 +88,6 @@ function App() {
         );
         setOpenSignIn(false);
     };
-
-    // console.log(posts)
 
     return (
         <div className="App">
@@ -205,7 +204,15 @@ function App() {
             /> */}
 
             {user ? (
-                <ImageUpload username={user.displayName} />
+                <ImageUpload
+                    username={
+                        user
+                            ? !user.displayName
+                                ? username
+                                : user.displayName
+                            : ""
+                    }
+                />
             ) : (
                 <center>
                     <h3>Sorry, you need to log in to upload the image...</h3>
